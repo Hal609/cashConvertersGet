@@ -19,7 +19,7 @@ numPages = int(numResults)/9 + 1 #Claculates number of pages at 9 items per page
 
 products = [] #Initialises products list
 
-numPages = 3 #Temporarily overwrite number of pages to one to save time when debugging
+numPages = 5 #Temporarily overwrite number of pages to one to save time when debugging
 
 for i in range(numPages): #Loop trough all pages of restuls
     res = requests.get('https://www.cashconverters.co.uk/' + shopName + '/products?page=' + str(i))
@@ -44,10 +44,12 @@ Price == "data-price"
 href == "href"
 '''
 
+searchTerm = "guitar"
+
 for i in range(len(products)):
-    print(products[i]["data-category"])
-    if "Musical Instruments/ Guitars" in products[i]["data-category"]:
-        print("found")
+    if searchTerm in products[i]["data-category"].lower() or searchTerm in products[i]["data-name"].lower():
+        print("{0:70.70}:   {1:5}".format(products[i]["data-name"].title().encode("utf-8"), products[i]["data-price"].title().encode("utf-8")))
+        print(products[i].find_all("a")[0].get("href"))
 '''
 for i in range(len(products)):
     print("{0:70.70}:   {1:5}".format(products[i]["data-name"].title().encode("utf-8"), products[i]["data-price"].title().encode("utf-8")))
