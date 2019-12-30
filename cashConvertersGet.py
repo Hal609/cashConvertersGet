@@ -17,8 +17,9 @@ def pageCount(shopName):
     return(int(numResults)/9 + 1) #Claculates number of pages at 9 items per page
 
 def loadProducts(shopName):
+    print(shopName)
+
     numPages = pageCount(shopName)
-    numPages = 5
 
     for i in range(numPages): #Loop trough all pages
         ccSoup = loadPage(shopName, i) #Load each page
@@ -30,26 +31,35 @@ def loadProducts(shopName):
 
 def productSearch(*searchTerms):
     found = []
-    for i in range(len(products)):
-        cat = products[i]["data-category"].lower()
-        name = products[i]["data-name"].lower()
-        for j in searchTerms:
-            if j in cat or j in name:
-                if i not in found:
-                    found.append(i)
-    for i in found:
-        print("{0:70.70}:   {1:5}".format(products[i]["data-name"].title().encode("utf-8"), products[i]["data-price"].title().encode("utf-8")))
-        print(products[i].find_all("a")[0].get("href"))
+    print("{0:70.70}    {1:5}".format("Item", "Price"))
+    for id in range(len(products)):
+        cat = products[id]["data-category"].lower()
+        name = products[id]["data-name"].lower()
 
+        for search in searchTerms:
+            if search in cat or search in name:
+                if id not in found:
+                    found.append(id)
+    for id in found:
+        print("{0:70.70}:   {1:5}".format(products[id]["data-name"].title().encode("utf-8"), products[id]["data-price"].title().encode("utf-8")))
+        print(products[id].find_all("a")[0].get("href"))
 
-#init variables
-page = "1"
 products = []
 
-loadProducts("Blackpool-Church-Street")
-
+loadProducts("Sheffield-Gleadless-Road")
 productSearch("guitar")
-productSearch("tv", "television")
+
+loadProducts("Sheffield-Hillsborough")
+productSearch("guitar")
+
+loadProducts("Preston")
+productSearch("guitar")
+
+loadProducts("Blackpool-Church-Street")
+productSearch("guitar")
+
+loadProducts("Blackpool-South-Shore")
+productSearch("guitar")
 
 
 '''
