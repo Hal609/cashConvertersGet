@@ -14,9 +14,10 @@ def pageCount(shopName):
 
     #Find the number of restuls and thus the number of pages to check
     numResults = ccSoup.select('p em')[1].getText() #Grabs second <em> element within a <p> element
-    return(int(numResults)/9 + 1) #Claculates number of pages at 9 items per page
+    return(int(int(numResults)/9 + 1)) #Claculates number of pages at 9 items per page
 
 def loadProducts(shopName):
+    products.clear()
     print(shopName)
 
     numPages = pageCount(shopName)
@@ -31,21 +32,28 @@ def loadProducts(shopName):
 
 def productSearch(*searchTerms):
     found = []
-    print("{0:70.70}    {1:5}".format("Item", "Price"))
+
+    print("{0:70.70}    {1:5}     {2:100}".format("Item", "Price", "URL"))
+
     for id in range(len(products)):
         cat = products[id]["data-category"].lower()
         name = products[id]["data-name"].lower()
 
         for search in searchTerms:
-            if search in cat or search in name:
+
+            if search[0] == "-":
+                search = search[1:]
+                if search in cat or search in name:
+                    if id in found:
+                        found.remove(id)
+            elif search in cat or search in name:
                 if id not in found:
                     found.append(id)
     for id in found:
-        print("{0:70.70}:   {1:5}".format(products[id]["data-name"].title().encode("utf-8"), products[id]["data-price"].title().encode("utf-8")))
-        print(products[id].find_all("a")[0].get("href"))
+        print("{0:70.70}:   {1:5.5}     {2:100}".format(products[id]["data-name"].title(), products[id]["data-price"].title(), products[id].find_all("a")[0].get("href")))
 
 products = []
-
+'''
 loadProducts("Sheffield-Gleadless-Road")
 productSearch("guitar")
 
@@ -54,12 +62,12 @@ productSearch("guitar")
 
 loadProducts("Preston")
 productSearch("guitar")
-
+'''
 loadProducts("Blackpool-Church-Street")
 productSearch("guitar")
 
-loadProducts("Blackpool-South-Shore")
-productSearch("guitar")
+#loadProducts("Blackpool-South-Shore")
+#productSearch("guitar")
 
 
 '''
