@@ -18,7 +18,8 @@ def pageCount(shopName):
 
 def loadProducts(shopName):
     products.clear()
-    print(shopName)
+
+    print("\n" + shopName + "\n" + "="*len(shopName) + "\n")
 
     numPages = pageCount(shopName)
 
@@ -33,7 +34,7 @@ def loadProducts(shopName):
 def productSearch(*searchTerms):
     found = []
 
-    print("{0:70.70}    {1:5}     {2:100}".format("Item", "Price", "URL"))
+    print("{0:60.60}    {1:5}     {2:100} \n".format("Item", "Price", "URL"))
 
     for id in range(len(products)):
         cat = products[id]["data-category"].lower()
@@ -41,7 +42,7 @@ def productSearch(*searchTerms):
 
         for search in searchTerms:
 
-            if search[0] == "-":
+            if search[0] == "-": #If negative search term
                 search = search[1:]
                 if search in cat or search in name:
                     if id in found:
@@ -50,24 +51,15 @@ def productSearch(*searchTerms):
                 if id not in found:
                     found.append(id)
     for id in found:
-        print("{0:70.70}:   {1:5.5}     {2:100}".format(products[id]["data-name"].title(), products[id]["data-price"].title(), products[id].find_all("a")[0].get("href")))
+        print("{0:60.60}:   {1:5.5}     {2:100}".format(products[id]["data-name"].title(), products[id]["data-price"].title(), products[id].find_all("a")[0].get("href")))
 
 products = []
-'''
-loadProducts("Sheffield-Gleadless-Road")
-productSearch("guitar")
 
-loadProducts("Sheffield-Hillsborough")
-productSearch("guitar")
+shops = ["Sheffield-Gleadless-Road", "Sheffield-Hillsborough", "Preston", "Blackpool-Church-Street", "Blackpool-South-Shore"]
 
-loadProducts("Preston")
-productSearch("guitar")
-'''
-loadProducts("Blackpool-Church-Street")
-productSearch("guitar")
-
-#loadProducts("Blackpool-South-Shore")
-#productSearch("guitar")
+for shop in shops:
+    loadProducts(shop)
+    productSearch("guitar", "-amp", "-amplifier", "-tuner")
 
 
 '''
