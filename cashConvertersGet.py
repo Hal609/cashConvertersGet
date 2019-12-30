@@ -19,7 +19,8 @@ def pageCount(shopName):
 def loadProducts(shopName):
     products.clear()
 
-    print("\n" + shopName + "\n" + "="*len(shopName) + "\n")
+    with open(outputFile, "a") as out:
+        out.write("\n\n" + shopName + "\n" + "="*len(shopName) + "\n")
 
     numPages = pageCount(shopName)
 
@@ -31,10 +32,12 @@ def loadProducts(shopName):
             if divElems[j].get("class") == ['panel', 'panel-default', 'product-panel']:
                 products.append(divElems[j])
 
+
 def productSearch(*searchTerms):
     found = []
 
-    print("{0:60.60}    {1:5}     {2:100} \n".format("Item", "Price", "URL"))
+    with open(outputFile, "a") as out:
+        out.write("{0:60.60}    {1:6}     {2:100} \n\n".format("Item", "Price", "URL"))
 
     for id in range(len(products)):
         cat = products[id]["data-category"].lower()
@@ -51,16 +54,23 @@ def productSearch(*searchTerms):
                 if id not in found:
                     found.append(id)
     for id in found:
-        print("{0:60.60}:   {1:5.5}     {2:100}".format(products[id]["data-name"].title(), products[id]["data-price"].title(), products[id].find_all("a")[0].get("href")))
+        result = "{0:60.60}:   {1:>6.6}     {2:100}".format(products[id]["data-name"].title(), products[id]["data-price"].title(), products[id].find_all("a")[0].get("href"))
+        with open(outputFile, "a") as out:
+            out.write(result + "\n")
 
 products = []
+outputFile = "/home/hal/Documents/PythonScripts/cashConverters/Output.txt"
+
+with open(outputFile, "w") as out:
+    #out.write("CASH CONVERTERS SEARCH TOOL\n---------------------------")
+    out.write("╔═╗┌─┐┌─┐┬ ┬╔═╗┌─┐┬  ┬┌─┐┬─┐┌┬┐┌─┐┬─┐┌─┐╔╦╗┌─┐┌─┐┬\n║  ├─┤└─┐├─┤║  │ │└┐┌┘├┤ ├┬┘ │ ├┤ ├┬┘└─┐ ║ │ ││ ││\n╚═╝┴ ┴└─┘┴ ┴╚═╝└─┘ └┘ └─┘┴└─ ┴ └─┘┴└─└─┘ ╩ └─┘└─┘┴─┘\n")
 
 shops = ["Sheffield-Gleadless-Road", "Sheffield-Hillsborough", "Preston", "Blackpool-Church-Street", "Blackpool-South-Shore"]
+#shops = ["Blackpool-Church-Street"]
 
 for shop in shops:
     loadProducts(shop)
     productSearch("guitar", "-amp", "-amplifier", "-tuner")
-
 
 '''
 Product Info
