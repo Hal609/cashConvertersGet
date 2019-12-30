@@ -28,27 +28,28 @@ def loadProducts(shopName):
             if divElems[j].get("class") == ['panel', 'panel-default', 'product-panel']:
                 products.append(divElems[j])
 
-def productSearch(searchTerm, *secondTerm):
+def productSearch(*searchTerms):
+    found = []
     for i in range(len(products)):
         cat = products[i]["data-category"].lower()
         name = products[i]["data-name"].lower()
-        if searchTerm in cat or searchTerm in name:
-            print("{0:70.70}:   {1:5}".format(products[i]["data-name"].title().encode("utf-8"), products[i]["data-price"].title().encode("utf-8")))
-            print(products[i].find_all("a")[0].get("href"))
+        for j in searchTerms:
+            if j in cat or j in name:
+                if i not in found:
+                    found.append(i)
+    for i in found:
+        print("{0:70.70}:   {1:5}".format(products[i]["data-name"].title().encode("utf-8"), products[i]["data-price"].title().encode("utf-8")))
+        print(products[i].find_all("a")[0].get("href"))
 
 
 #init variables
-#shopName = "Blackpool-Church-Street"
 page = "1"
 products = []
-
-#numPages = pageCount(shopName)
-#numPages = 5 #Temporarily overwrite number of pages to one to save time when debugging
 
 loadProducts("Blackpool-Church-Street")
 
 productSearch("guitar")
-productSearch("tv")
+productSearch("tv", "television")
 
 
 '''
